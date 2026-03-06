@@ -6,7 +6,7 @@ Sistema web interno para registrar consultas comerciales (WhatsApp / Email), asi
 
 ### Stack elegido
 - **Backend + frontend server-side:** Flask + Jinja2.
-- **Base de datos:** PostgreSQL (latest).
+- **Base de datos:** PostgreSQL 17 (imagen fijada para evitar cambios incompatibles al usar `latest`).
 - **Persistencia de adjuntos:** carpeta montada en volumen (`/app/uploads`).
 - **Orquestación:** Docker Compose.
 
@@ -148,6 +148,14 @@ docker compose up -d --build
 Persistencia en carpetas del host (`./`):
 - Base de datos: `./postgres_data`
 - Adjuntos: `./app/uploads`
+
+
+### Nota sobre versión de PostgreSQL
+- La imagen quedó fijada en `postgres:17` para evitar rupturas al actualizar automáticamente desde `latest`.
+- Si ya tenías datos locales de otra versión y aparece un error de compatibilidad, podés:
+  1. Mantener la misma versión que creó ese volumen/carpeta, o
+  2. Hacer migración de versión con `pg_upgrade`, o
+  3. Si no necesitás los datos, borrar `./postgres_data` y recrear.
 
 ## Usuarios iniciales
 Se crean automáticamente al iniciar:

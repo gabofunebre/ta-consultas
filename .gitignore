@@ -32,3 +32,7 @@ app/uploads/*
 Thumbs.db
 .vscode/
 .idea/
+
+# Persistencia de PostgreSQL en host
+postgres_data/*
+!postgres_data/.gitkeep

@@ -16,7 +16,7 @@ services:
       - ta_tunn_net
 
   db:
-    image: postgres:latest
+    image: postgres:17
     container_name: TA-consultas-db
     restart: unless-stopped
     env_file:
