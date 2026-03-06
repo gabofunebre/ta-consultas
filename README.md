@@ -135,6 +135,8 @@ cp .env.example .env
 
 2. Ajustar variables si hace falta.
 
+> Sugerencia: si vas a ejecutar la app fuera de Docker Compose, configurá `POSTGRES_HOST=localhost` o un `DATABASE_URL` completo apuntando a tu instancia de PostgreSQL.
+
 ## Levantar el sistema
 
 ```bash
