@@ -146,7 +146,7 @@ docker compose up -d --build
 > **Importante:** este `docker-compose.yml` **no expone puertos al host**, tal como solicitaste. El acceso se realiza por la red compartida `TA_tunn_net` (por ejemplo con cloudflared).
 
 Persistencia en carpetas del host (`./`):
-- Base de datos: `./postgres_data`
+- Base de datos: `./postgres_data` (el clúster se inicializa dentro de `./postgres_data/pgdata`)
 - Adjuntos: `./app/uploads`
 
 
