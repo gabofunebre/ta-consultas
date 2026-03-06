@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>Nueva consulta</h2>
+  <form method="post" enctype="multipart/form-data" class="form-grid">
+    <label>Canal
+      <select name="canal" required>
+        <option value="">Seleccionar...</option>
+        <option>WhatsApp</option>
+        <option>Email</option>
+      </select>
+    </label>
+
+    <label>Nombre del contacto
+      <input type="text" name="nombre_contacto" required>
+    </label>
+
+    <label>Teléfono o Email
+      <input type="text" name="telefono_o_email" required>
+    </label>
+
+    <label>Conversación / Texto recibido
+      <textarea name="texto_consulta" rows="6" required></textarea>
+    </label>
+
+    <label>Responsable asignado
+      <select name="responsable_id" required>
+        <option value="">Seleccionar vendedor...</option>
+        {% for v in vendedores %}
+          <option value="{{ v.id }}">{{ v.nombre }}</option>
+        {% endfor %}
+      </select>
+    </label>
+
+    <label>Observaciones opcionales
+      <textarea name="observaciones_opcionales" rows="3"></textarea>
+    </label>
+
+    <label>Adjuntos
+      <input type="file" name="adjuntos" multiple>
+    </label>
+
+    <button class="btn btn-primary btn-large" type="submit">Crear consulta</button>
+  </form>
+</div>
+{% endblock %}

@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>Consulta #{{ consulta.id }}</h2>
+  <p><strong>Fecha:</strong> {{ consulta.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</p>
+  <p><strong>Canal:</strong> {{ consulta.canal }}</p>
+  <p><strong>Contacto:</strong> {{ consulta.nombre_contacto }} ({{ consulta.telefono_o_email }})</p>
+  <p><strong>Estado actual:</strong> <span class="badge">{{ consulta.estado_actual }}</span></p>
+  <p><strong>Responsable:</strong> {{ consulta.responsable.nombre }}</p>
+
+  <h3>Texto original</h3>
+  <p class="panel">{{ consulta.texto_consulta }}</p>
+
+  <h3>Observaciones / notas</h3>
+  <p class="panel">{{ consulta.observaciones_opcionales or 'Sin notas.' }}</p>
+
+  <div class="actions-grid-small">
+    <form method="post" action="{{ url_for('main.consulta_change_state', consulta_id=consulta.id) }}" class="inline-form">
+      <select name="estado_actual">
+        {% for e in estados %}
+          <option value="{{ e }}" {% if consulta.estado_actual == e %}selected{% endif %}>{{ e }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn btn-primary" type="submit">Cambiar estado</button>
+    </form>
+
+    {% if g.user.role == 'admin' %}
+    <form method="post" action="{{ url_for('main.consulta_reassign', consulta_id=consulta.id) }}" class="inline-form">
+      <select name="responsable_id">
+        {% for v in vendedores %}
+          <option value="{{ v.id }}" {% if consulta.responsable_id == v.id %}selected{% endif %}>{{ v.nombre }}</option>
+        {% endfor %}
+      </select>
+      <button class="btn" type="submit">Reasignar</button>
+    </form>
+    {% endif %}
+
+    <form method="post" action="{{ url_for('main.consulta_upload_file', consulta_id=consulta.id) }}" enctype="multipart/form-data" class="inline-form">
+      <input type="file" name="archivo" required>
+      <button class="btn" type="submit">Adjuntar archivo</button>
+    </form>
+
+    <form method="post" action="{{ url_for('main.consulta_add_note', consulta_id=consulta.id) }}" class="inline-form">
+      <input type="text" name="nota" placeholder="Escribir nota breve" required>
+      <button class="btn" type="submit">Agregar nota</button>
+    </form>
+  </div>
+
+  <h3>Adjuntos</h3>
+  <ul>
+    {% for a in consulta.adjuntos %}
+      <li><a href="{{ url_for('main.download_upload', filename=a.ruta_archivo) }}">{{ a.nombre_archivo }}</a></li>
+    {% else %}
+      <li>Sin adjuntos.</li>
+    {% endfor %}
+  </ul>
+
+  <h3>Historial automático</h3>
+  <ul>
+    {% for h in historial %}
+      <li><strong>{{ h.fecha.strftime('%d/%m/%Y %H:%M') }}</strong> - {{ h.tipo_evento }}: {{ h.descripcion }}</li>
+    {% else %}
+      <li>No hay eventos aún.</li>
+    {% endfor %}
+  </ul>
+
+  <a class="btn" href="{{ url_for('main.consultas_list') }}">Volver al listado</a>
+</div>
+{% endblock %}
