@@ -37,6 +37,7 @@ Sistema web interno para registrar consultas comerciales (WhatsApp / Email), asi
 │   │   ├── consultas_list.html
 │   │   └── consulta_detail.html
 │   └── uploads/
+├── postgres_data/
 ├── docker-compose.yml
 ├── Dockerfile
 ├── requirements.txt
@@ -141,6 +142,10 @@ docker compose up -d --build
 ```
 
 > **Importante:** este `docker-compose.yml` **no expone puertos al host**, tal como solicitaste. El acceso se realiza por la red compartida `TA_tunn_net` (por ejemplo con cloudflared).
+
+Persistencia en carpetas del host (`./`):
+- Base de datos: `./postgres_data`
+- Adjuntos: `./app/uploads`
 
 ## Usuarios iniciales
 Se crean automáticamente al iniciar:

@@ -19,12 +19,9 @@ services:
     env_file:
       - .env
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ./postgres_data:/var/lib/postgresql/data
     networks:
       - ta_tunn_net
-
-volumes:
-  postgres_data:
 
 networks:
   ta_tunn_net:
