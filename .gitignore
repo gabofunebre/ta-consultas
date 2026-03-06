@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+app/uploads/*
+!app/uploads/.gitkeep
+
+postgres_data/*
+!postgres_data/.gitkeep

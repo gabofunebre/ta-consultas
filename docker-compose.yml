@@ -1,0 +1,29 @@
+services:
+  app:
+    build: .
+    container_name: TA-consultas-app
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      - db
+    volumes:
+      - ./app/uploads:/app/uploads
+    networks:
+      - ta_tunn_net
+
+  db:
+    image: postgres:latest
+    container_name: TA-consultas-db
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./postgres_data:/var/lib/postgresql/data
+    networks:
+      - ta_tunn_net
+
+networks:
+  ta_tunn_net:
+    name: TA_tunn_net
+    external: true
