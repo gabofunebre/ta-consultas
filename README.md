@@ -117,12 +117,13 @@ Sistema web interno para registrar consultas comerciales (WhatsApp / Email), asi
 
 ## Requisitos
 - Docker + Docker Compose
-- Red Docker externa existente: `TA_tunn_net`
+- Redes Docker externas existentes: `TA_tunn_net` y `TA_internal_net`
 
-Crear red si no existe:
+Crear redes si no existen:
 
 ```bash
 docker network create TA_tunn_net
+docker network create TA_internal_net
 ```
 
 ## Variables de entorno
@@ -143,10 +144,11 @@ cp .env.example .env
 docker compose up -d --build
 ```
 
-> **Importante:** este `docker-compose.yml` **no expone puertos al host**, tal como solicitaste. El acceso se realiza por la red compartida `TA_tunn_net` (por ejemplo con cloudflared).
+> **Importante:** este `docker-compose.yml` **no expone puertos al host**, tal como solicitaste.
+> La app queda conectada a `TA_tunn_net` y `TA_internal_net`, mientras que la base de datos queda solo en `TA_internal_net`.
 
 Persistencia en carpetas del host (`./`):
-- Base de datos: `./postgres_data`
+- Base de datos: `./postgres_data` (el clúster se inicializa dentro de `./postgres_data/pgdata`)
 - Adjuntos: `./app/uploads`
 
 

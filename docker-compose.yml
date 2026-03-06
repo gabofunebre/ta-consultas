@@ -14,6 +14,7 @@ services:
       - ./app/uploads:/app/uploads
     networks:
       - ta_tunn_net
+      - ta_internal_net
 
   db:
     image: postgres:17
@@ -21,6 +22,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    environment:
+      PGDATA: /var/lib/postgresql/data/pgdata
     volumes:
       - ./postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -29,9 +32,12 @@ services:
       timeout: 5s
       retries: 10
     networks:
-      - ta_tunn_net
+      - ta_internal_net
 
 networks:
   ta_tunn_net:
     name: TA_tunn_net
+    external: true
+  ta_internal_net:
+    name: TA_internal_net
     external: true
