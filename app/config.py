@@ -2,11 +2,11 @@ import os
 
 
 def _build_database_url() -> str:
-    user = os.getenv('POSTGRES_USER', 'postgres')
-    password = os.getenv('POSTGRES_PASSWORD', 'postgres')
-    host = os.getenv('POSTGRES_HOST') or os.getenv('DB_HOST') or 'localhost'
-    port = os.getenv('POSTGRES_PORT', '5432')
-    db_name = os.getenv('POSTGRES_DB', 'consultas_db')
+    user = os.getenv('DB_USER') or os.getenv('POSTGRES_USER', 'postgres')
+    password = os.getenv('DB_PASSWORD') or os.getenv('POSTGRES_PASSWORD', 'postgres')
+    host = os.getenv('DB_HOST') or os.getenv('POSTGRES_HOST') or 'localhost'
+    port = os.getenv('DB_PORT') or os.getenv('POSTGRES_PORT', '5432')
+    db_name = os.getenv('DB_NAME') or os.getenv('POSTGRES_DB', 'consultas_db')
     return f'postgresql+psycopg2://{user}:{password}@{host}:{port}/{db_name}'
 
 
