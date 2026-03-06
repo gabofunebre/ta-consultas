@@ -136,12 +136,21 @@ cp .env.example .env
 
 2. Ajustar variables si hace falta.
 
-> Sugerencia: si vas a ejecutar la app fuera de Docker Compose, configurá `POSTGRES_HOST=localhost` o un `DATABASE_URL` completo apuntando a tu instancia de PostgreSQL.
+Variables recomendadas:
+- `POSTGRES_*`: las usa el contenedor `db` para inicializar el clúster **solo en el primer arranque**.
+- `DB_*`: las usa la app para conectarse a la base (si faltan, usa `POSTGRES_*` como fallback).
+- `DATABASE_URL`: si está definida y no está vacía, tiene prioridad sobre `DB_*` y `POSTGRES_*`.
+
+> Sugerencia: si vas a ejecutar la app fuera de Docker Compose, configurá `DB_HOST=localhost` o un `DATABASE_URL` completo apuntando a tu instancia de PostgreSQL.
+
+> Importante: si cambiás `POSTGRES_USER` o `POSTGRES_PASSWORD` después de que `./postgres_data` ya fue inicializada, Postgres mantiene las credenciales viejas. En ese caso, cambiá la contraseña dentro de la base o recreá el volumen/carpeta de datos.
 
 ## Levantar el sistema
 
 ```bash
 docker compose up -d --build
+# o equivalente:
+make up
 ```
 
 > **Importante:** este `docker-compose.yml` **no expone puertos al host**, tal como solicitaste.
