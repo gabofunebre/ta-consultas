@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="card">
+  <h2>{{ title }}</h2>
+  <form method="get" class="filters">
+    <input type="text" name="q" placeholder="Buscar por nombre o contacto" value="{{ filtros.q }}">
+    <select name="estado">
+      <option value="">Todos los estados</option>
+      {% for estado in estados %}
+        <option value="{{ estado }}" {% if filtros.estado == estado %}selected{% endif %}>{{ estado }}</option>
+      {% endfor %}
+    </select>
+    {% if g.user.role == 'admin' %}
+    <select name="responsable">
+      <option value="">Todos los vendedores</option>
+      {% for v in vendedores %}
+        <option value="{{ v.id }}" {% if filtros.responsable == v.id|string %}selected{% endif %}>{{ v.nombre }}</option>
+      {% endfor %}
+    </select>
+    {% endif %}
+    <button class="btn" type="submit">Filtrar</button>
+  </form>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Fecha</th>
+          <th>Contacto</th>
+          <th>Canal</th>
+          <th>Estado</th>
+          <th>Responsable</th>
+          <th>Acción</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in consultas %}
+          <tr>
+            <td>#{{ c.id }}</td>
+            <td>{{ c.fecha_creacion.strftime('%d/%m/%Y %H:%M') }}</td>
+            <td>{{ c.nombre_contacto }}<br><small>{{ c.telefono_o_email }}</small></td>
+            <td>{{ c.canal }}</td>
+            <td><span class="badge">{{ c.estado_actual }}</span></td>
+            <td>{{ c.responsable.nombre }}</td>
+            <td><a class="btn" href="{{ url_for('main.consulta_detail', consulta_id=c.id) }}">Abrir</a></td>
+          </tr>
+        {% else %}
+          <tr><td colspan="7">No hay consultas para mostrar.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

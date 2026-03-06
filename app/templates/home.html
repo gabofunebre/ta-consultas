@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="actions-grid">
+  {% if g.user.role == 'admin' %}
+  <a class="btn btn-large btn-primary" href="{{ url_for('main.consulta_new') }}">Nueva consulta</a>
+  {% endif %}
+  <a class="btn btn-large" href="{{ url_for('main.consultas_list') }}">Ver todas las consultas</a>
+  <a class="btn btn-large" href="{{ url_for('main.mis_consultas') }}">Mis consultas</a>
+</div>
+{% endblock %}
