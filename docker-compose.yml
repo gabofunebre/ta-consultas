@@ -41,3 +41,4 @@ networks:
   ta_internal_net:
     name: TA_internal_net
     external: true
+

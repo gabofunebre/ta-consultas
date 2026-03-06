@@ -159,6 +159,35 @@ Persistencia en carpetas del host (`./`):
   2. Hacer migración de versión con `pg_upgrade`, o
   3. Si no necesitás los datos, borrar `./postgres_data` y recrear.
 
+
+### Permisos de `postgres_data` (host bind mount)
+Si querés mantener los datos de Postgres dentro del proyecto (`./postgres_data`), el proceso de Postgres dentro del contenedor necesita poder escribir en esa carpeta.
+
+El contenedor oficial de Postgres usa por defecto el usuario `postgres` con **UID:GID `999:999`**.
+
+1. Crear carpeta local:
+```bash
+mkdir -p ./postgres_data
+```
+
+2. Asignar owner/permisos correctos (opción recomendada):
+```bash
+make fix-db-perms
+```
+
+3. Levantar servicios:
+```bash
+make up
+```
+
+Si preferís hacerlo manualmente en Linux:
+```bash
+sudo chown -R 999:999 ./postgres_data
+sudo chmod 700 ./postgres_data
+```
+
+> Si tu carpeta del proyecto está en un disco con permisos no POSIX (por ejemplo NTFS montado sin metadata), `chown/chmod` puede no surtir efecto. En ese caso, mové el repo a un filesystem Linux (ext4) o habilitá metadata/ACL en el montaje.
+
 ## Usuarios iniciales
 Se crean automáticamente al iniciar:
 - `admin@ta.local` / `admin123`

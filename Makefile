@@ -26,7 +26,7 @@ RESET := \033[0m
 # -----------------------------------------------------------------------------
 .PHONY: help makehelp doctor init env network build up down stop start restart rebuild \
         ps logs logs-app logs-db pull shell-app shell-db db-cli exec-app exec-db \
-        status clean reset-db reset-all
+        status clean fix-db-perms reset-db reset-all
 
 help: makehelp ## Alias de makehelp.
 
@@ -127,14 +127,19 @@ exec-db: ## Ejecuta comando en db. Uso: make exec-db CMD='psql -U ...'
 clean: ## Baja stack y elimina volúmenes huérfanos de compose.
 	@$(COMPOSE) down --volumes --remove-orphans
 
+fix-db-perms: ## Ajusta permisos/owner de ./postgres_data para Postgres (UID:GID 999:999).
+	@mkdir -p ./postgres_data
+	@docker run --rm --user root -v "$(PWD)/postgres_data:/var/lib/postgresql/data" alpine:3.20 sh -lc "chown -R 999:999 /var/lib/postgresql/data && chmod 700 /var/lib/postgresql/data"
+	@echo -e "$(GREEN)✔ Permisos de ./postgres_data ajustados a 999:999$(RESET)"
+
 reset-db: ## Reinicia SOLO datos de Postgres (borra ./postgres_data).
 	@$(COMPOSE) down
+	@mkdir -p ./postgres_data
 	@rm -rf ./postgres_data/*
-	@$(COMPOSE) up -d --build
 	@echo -e "$(YELLOW)⚠ Base reiniciada: ./postgres_data fue limpiado$(RESET)"
 
 reset-all: ## Reinicia TODO (db + uploads) y levanta de cero.
 	@$(COMPOSE) down
+	@mkdir -p ./postgres_data
 	@rm -rf ./postgres_data/* ./app/uploads/*
-	@$(COMPOSE) up -d --build
 	@echo -e "$(YELLOW)⚠ Datos reiniciados: postgres_data y app/uploads$(RESET)"
